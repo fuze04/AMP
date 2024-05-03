@@ -1,0 +1,250 @@
+Practical 10 :Create a CRUD operation using SQLite API.
+
+mainactivity.java
+
+package com.example.test;
+
+import android.database.Cursor;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
+
+public class MainActivity extends AppCompatActivity {
+    DBHelper dbHelper;
+
+    EditText usernameEditText, phoneNumberEditText, nameEditText, emailEditText, passwordEditText;
+    Button registerButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        usernameEditText = findViewById(R.id.usernameEditText);
+        phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
+        nameEditText = findViewById(R.id.nameEditText);
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        registerButton = findViewById(R.id.registerButton);
+
+        dbHelper = new DBHelper(MainActivity.this);
+
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String username = usernameEditText.getText().toString().trim();
+                String phoneNumber = phoneNumberEditText.getText().toString().trim();
+                String name = nameEditText.getText().toString().trim();
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+
+
+                if (username.isEmpty() || phoneNumber.isEmpty() || name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                } else {
+
+
+                    Toast.makeText(MainActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+
+            }
+        });
+    }
+
+    private void validateuser(String username, String email, String name, String password, String phoneNumber) {
+        Cursor c = dbHelper.checkUser(email);
+
+        if(c.getCount() == 1) {
+            while(c.moveToNext()) {
+                String passwd = c.getString(2);
+            /*
+            if(password.equals(passwd)){
+
+            } else {
+
+            }*/
+                Boolean result = dbHelper.insertData(username, phoneNumber, name, email, password);
+                if(result) {
+
+
+                } else {
+
+                }
+            }
+
+        } else {
+
+        }
+    }
+
+}
+
+
+
+
+mainactivity.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:inputType="text"
+
+        android:hint="Username" />
+
+    <EditText
+        android:id="@+id/phoneNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/usernameEditText"
+        android:layout_marginTop="16dp"
+        android:inputType="number"
+        android:maxLength="10"
+        android:hint="Phone Number" />
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phoneNumberEditText"
+        android:layout_marginTop="16dp"
+        android:inputType="text"
+        android:hint="Name" />
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameEditText"
+        android:layout_marginTop="16dp"
+        android:hint="Email" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emailEditText"
+        android:inputType="textPassword"
+        android:layout_marginTop="16dp"
+        android:hint="Password" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordEditText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="169dp"
+        android:text="Register" />
+
+</RelativeLayout>
+
+
+step: to create java file : right click on com.example -> select new -> select java class -> and name the file as dbhelper and click OK.
+
+
+dbhelper.java
+
+package com.example.test;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class DBHelper extends SQLiteOpenHelper {
+    public static final String dbname="college.db";
+    public static final String tabelname="students";
+    public DBHelper(@Nullable Context context) {
+        super(context, dbname, null,1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("create table "+tabelname+"(id int PRIMARY KEY AUTOINCREMENT,username TEXT,phonenumber TEXT,name TEXT,email TEXT,password TEXT)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+        sqLiteDatabase.execSQL("drop table if exists "+tabelname);
+    }
+
+    public Boolean insertData(String username,String phonenumber,String name,String email,String password)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("username",username);
+        contentValues.put("phonenumber",phonenumber);
+        contentValues.put("email",email);
+        contentValues.put("name",name);
+        contentValues.put("password",password);
+
+        long result = db.insert(tabelname,null,contentValues);
+        if(result==-1){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean deleteData(int id){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("delete from "+ tabelname+" where id="+id );
+        return true;
+    }
+    public boolean deleteAllData(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("delete from "+ tabelname );
+        return true;
+    }
+    public Cursor readData(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cursor=db.rawQuery("select*from "+tabelname,null);
+        return cursor;
+    }
+
+    public Cursor readSingleData(int id){
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cursor=db.rawQuery("select*from "+tabelname +"where id="+id,null);
+        return cursor;
+    }
+
+    public Cursor checkUser(String email){
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cursor=db.rawQuery("select * from "+tabelname+" where email='"+email+"'",null);
+        return cursor;
+    }
+
+
+}

@@ -1,0 +1,76 @@
+Practical 7: Implement the use of menus.
+
+
+steps to create menu.xml
+
+right click on res folder -> slect new -> select android resource file -> give name as menus -> select the menu option from the drop down list-> ok
+
+
+
+steps to create drawable: right click on res -> select new -> select vector asset -> then choose the icon needed -> click next -> click finish.
+
+
+
+menu.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto">
+ <item android:title="Welcome" android:id="@+id/menu_welcome" />
+ <item android:title="Welcome" android:id="@+id/menu_welcome1" />
+ <item android:id="@+id/Logout" android:title="Logout"
+android:icon="@drawable/baseline_logout_24"
+app:showAsAction="ifRoom"></item>
+</menu>
+
+
+
+mainactivity.xml
+
+<TextView
+        android:layout_width="204dp"
+        android:layout_height="45dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="140dp"
+        android:textAlignment="center"
+        android:text="hello guyss" />
+
+
+
+mainactivity.java
+
+package com.example.test;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menus,null);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id=item.getItemId();
+        if(id==R.id.menu_welcome){
+            return true;
+        } else if (id==R.id.menu_welcome1) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
+

@@ -1,0 +1,102 @@
+Practical 3: How to move from one page to another with data.
+activity_main.xml
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:id="@+id/main"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <EditText
+ android:id="@+id/name"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:hint="Enter Your Name"
+ android:layout_centerInParent="true"
+ android:padding="20dp"
+ android:width="300dp"/>
+ <Button
+ android:id="@+id/send"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Send"
+ android:layout_below="@+id/name"
+ android:layout_centerHorizontal="true"
+ android:layout_marginTop="20dp"/>
+</RelativeLayout>
+
+mainactivity.java
+
+public class MainActivity extends AppCompatActivity {
+ Button send;
+ EditText uname;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ uname = findViewById(R.id.name);
+ send = findViewById(R.id.send);
+ send.setOnClickListener(view -> {
+ String name = uname.getText().toString().trim();
+ if (name.isEmpty()) {
+ Toast.makeText(MainActivity.this, "Enter Your Name",
+Toast.LENGTH_SHORT).show();
+ } else {
+ Intent intent = new Intent(MainActivity.this, page2.class);
+ intent.putExtra("name", name);
+ startActivity(intent);
+ }
+ });
+ }
+}
+
+
+Step: to create new page -> right click on java folder-> click on new -> select the activity -> select empty view activity -> name the file on top field.-> click ok
+
+page2.xml
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:id="@+id/main"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".page2">
+<TextView
+ android:id="@+id/received_value_id"
+ android:layout_width="300dp"
+ android:layout_height="50dp"
+ android:layout_centerInParent="true"
+ android:layout_marginStart="40dp"
+ android:layout_marginLeft="40dp"
+ android:layout_marginTop="20dp"
+ android:text="Welcome "
+ android:textSize="40sp"
+ android:textStyle="bold" />
+</RelativeLayout>
+
+page2.java
+
+package com.example.one_page_to_another;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+public class page2 extends AppCompatActivity {
+ TextView msg;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_page2);
+ msg = findViewById(R.id.received_value_id);
+ // create the get Intent object
+ Intent intent = getIntent();
+ // receive the value by getStringExtra() method and
+ // key must be same which is send by first activity
+ String str = intent.getStringExtra("name");
+ String weclomemsg = "Welcome " + str;
+ // display the string into textView
+ msg.setText(weclomemsg);
+ }
+}

@@ -1,0 +1,81 @@
+Practical 6: Implement the use of alert dialog.
+
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <Button
+ android:id="@+id/click"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginTop="261dp"
+ android:layout_centerInParent="true"
+ android:text="Click Me!"
+ />
+</RelativeLayout>
+
+
+steps to create drawable: right click on res -> select new -> select vector asset -> then choose the icon needed -> click next -> click finish.
+
+
+
+
+MainActivity.java
+
+package com.example.test;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+public class MainActivity extends AppCompatActivity {
+    Button b;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        b= findViewById(R.id.click);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new
+                        AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Success");
+                builder.setMessage("Alert Dialog is visible");
+                builder.setCancelable(false);
+                builder.setIcon(R.drawable.baseline_close_24); 
+                builder.setPositiveButton("Okay", new
+                        DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i)
+                            {
+                            }
+                        });
+                builder.setNegativeButton("Cancel", new
+                        DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i)
+                            {
+                            }
+                        });
+                builder.setNeutralButton("Neutral", new
+                        DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i)
+                            {
+                            }
+                        });
+                builder.show();
+            }
+        });
+    }
+}

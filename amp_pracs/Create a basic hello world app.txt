@@ -1,0 +1,39 @@
+practical 1:Create a basic hello world app.
+
+mainActivity.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:id="@+id/main"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Hello World!"
+ android:layout_centerInParent="true"
+ android:textSize="40dp"
+ />
+</RelativeLayout>
+
+
+**DONT COPY ENTIRE JAVA FILE 
+COPY FROM override method 
+
+mainActivity.java
+
+import android.os.Bundle;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ EdgeToEdge.enable(this);
+ setContentView(R.layout.activity_main);
+ }
+}
